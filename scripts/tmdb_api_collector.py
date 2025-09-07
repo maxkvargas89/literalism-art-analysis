@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 # Config
 API_KEY = "cebeceb26a762ee305f9c4c6384ea3d6"
 BASE_URL = "https://api.themoviedb.org/3"
-YEARS = list(range(2015, 2025, 1))  # Spread across decades
+YEARS = list(range(1970, 1980, 1))  # Spread across decades
 DATES_PER_YEAR = 3                 # Number of random release windows per year
 DAYS_RANGE = 60                    # Length of each sampling window
 MOVIES_PER_SAMPLE = 15            # Max movies per page
