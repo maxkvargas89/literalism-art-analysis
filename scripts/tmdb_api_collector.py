@@ -16,11 +16,11 @@ from datetime import datetime, timedelta
 # Config
 API_KEY = "cebeceb26a762ee305f9c4c6384ea3d6"
 BASE_URL = "https://api.themoviedb.org/3"
-YEARS = list(range(2000, 2025, 1))  # Spread across decades
+YEARS = list(range(2015, 2025, 1))  # Spread across decades
 DATES_PER_YEAR = 3                 # Number of random release windows per year
 DAYS_RANGE = 60                    # Length of each sampling window
-MOVIES_PER_SAMPLE = 20            # Max movies per page
-SLEEP = 0.4                        # Sleep between requests
+MOVIES_PER_SAMPLE = 15            # Max movies per page
+SLEEP = 0.5                        # Sleep between requests
 SORT_OPTIONS = [
     "popularity.desc", "vote_average.desc", "revenue.desc",
     "release_date.desc", "vote_count.desc"
@@ -105,7 +105,7 @@ for year in YEARS:
   
 # SAVE RESULTS
 df = pd.DataFrame(movie_data)
-OUTPUT_PATH = "/Users/maxvargas/code_testing/data/random_sampled_movies_by_year_v2.csv"
+OUTPUT_PATH = "/Users/maxvargas/literalism_art_analysis/data/random_sampled_movies_by_year.csv"
 if os.path.exists(OUTPUT_PATH):
     df.to_csv(OUTPUT_PATH, mode='a', header=False, index=False)
 else:
