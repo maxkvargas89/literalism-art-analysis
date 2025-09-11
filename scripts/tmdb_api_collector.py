@@ -12,9 +12,14 @@ import time
 import random
 import os
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+from pathlib import Path
+
 
 # Config
-API_KEY = "cebeceb26a762ee305f9c4c6384ea3d6"
+env_path = Path().resolve().parent / '.env'
+load_dotenv(dotenv_path=env_path)
+API_KEY = os.getenv("TMDB_API_KEY")
 BASE_URL = "https://api.themoviedb.org/3"
 YEARS = list(range(1970, 1980, 1))  # Spread across decades
 DATES_PER_YEAR = 3                 # Number of random release windows per year
