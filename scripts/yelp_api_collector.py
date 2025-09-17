@@ -21,10 +21,10 @@ env_path = Path().resolve().parent / '.env'
 load_dotenv(dotenv_path=env_path)
 API_KEY = os.getenv("TMDB_API_KEY")
 BASE_URL = "https://api.themoviedb.org/3"
-YEARS = list(range(2025, 2026, 1))  # Spread across decades
-DATES_PER_YEAR = 2                 # Number of random release windows per year
-DAYS_RANGE = 90                    # Length of each sampling window
-MOVIES_PER_SAMPLE = 10            # Max movies per page
+YEARS = list(range(1970, 1980, 1))  # Spread across decades
+DATES_PER_YEAR = 3                 # Number of random release windows per year
+DAYS_RANGE = 60                    # Length of each sampling window
+MOVIES_PER_SAMPLE = 15            # Max movies per page
 SLEEP = 0.5                        # Sleep between requests
 SORT_OPTIONS = [
     "popularity.desc", "vote_average.desc", "revenue.desc",
@@ -94,39 +94,23 @@ for year in YEARS:
             "language": "en-US"
         }
 
-        collected = 0
-        retries = 0
-        max_retries = 10
-    
-        while collected < MOVIES_PER_SAMPLE and retries < max_retries:
-             r = requests.get(discover_url, params=params)
-             if r.status_code == 200:
-                 results = r.json().get("results", [])
-                 random.shuffle(results)
-                 for m in results:
-                     if collected >= MOVIES_PER_SAMPLE:
-                         break
-                     details = get_movie_details(m["id"])
-                     if details and 'US' in details['origin_country']:
-                         movie_data.append(details)
-                         collected += 1
-                         print(f"✅ {details['title']} ({details['release_date']})")
-                     else:
-                         print(f"⏭️ Skipped non-US movie: {details['title'] if details else 'N/A'}")
-                     time.sleep(SLEEP)
-             else:
-                 print(f"❌ Failed discover fetch: {r.status_code}")
-                 retries += 1
-                 continue
-    
-             # Try next page if not enough US movies
-             params["page"] = random.randint(1, 10)
-             retries += 1
-             time.sleep(SLEEP)
+        r = requests.get(discover_url, params=params)
+        if r.status_code == 200:
+            results = r.json().get("results", [])
+            random.shuffle(results)  # Extra shuffle within result set
+            for m in results:
+                details = get_movie_details(m["id"])
+                if details:
+                    movie_data.append(details)
+                    print(f"✅ {details['title']} ({details['release_date']})")
+                time.sleep(SLEEP)
+        else:
+            print(f"❌ Failed discover fetch: {r.status_code}")
+        time.sleep(SLEEP)
   
 # SAVE RESULTS
 df = pd.DataFrame(movie_data)
-OUTPUT_PATH = "/Users/maxvargas/literalism_art_analysis/data/random_sampled_us_movies_by_year.csv"
+OUTPUT_PATH = "/Users/maxvargas/literalism_art_analysis/data/random_sampled_movies_by_year.csv"
 if os.path.exists(OUTPUT_PATH):
     df.to_csv(OUTPUT_PATH, mode='a', header=False, index=False)
 else:
