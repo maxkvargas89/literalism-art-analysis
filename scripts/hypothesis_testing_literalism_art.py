@@ -55,7 +55,7 @@ import cpi
 cpi.update()
 
 # hypothesis 1.1
-file = '/Users/maxvargas/literalism_art_analysis/data/random_sampled_us_movies_by_year_enriched.csv'
+file = '/Users/maxvargas/literalism_art_analysis/data/random_sampled_us_movies_by_year_enriched_v3.csv'
 df = pd.read_csv(file)
 
 ## parse dates, extract year, make budget numeric
@@ -109,6 +109,9 @@ df_indie = df[df['year'] > 2014]
 grouped = df.groupby(['decade','film_size','real_true_stories','adapted_inspired_based']).agg({'id': 'count', 'roi': 'mean'}).reset_index()
 grouped_blockbuster = df_blockbuster.groupby(['decade','real_true_stories','adapted_inspired_based']).agg({'id': 'count', 'roi': 'mean'}).reset_index()
 grouped_indie = df_indie.groupby(['year','real_true_stories','adapted_inspired_based']).agg({'id': 'count', 'roi': 'mean'}).reset_index()
+print(grouped)
+print(grouped_blockbuster)
+print(grouped_indie)
 
 ## create indie real_true_stories decade plot
 grouped_indie_pivot = grouped_indie.pivot_table(index='year', columns='real_true_stories', values='id', aggfunc='sum')
